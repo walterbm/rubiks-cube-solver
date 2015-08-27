@@ -16,7 +16,7 @@ class RubikCube
   end
 
   def print
-    "hello"
+    cube
   end
 
   def quarter_turn(direction)
@@ -24,31 +24,72 @@ class RubikCube
   end
 
   def front_clockwise
-    # [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
-    # [6,7,8,0,1,2,9,10,11,3,4,5,12,13,14,15,16,17,18,19,20,21,22,23]
-    @cube[0...3], @cube[3...6], @cube[6...9], @cube[9...12] = @cube[6...9], @cube[0...3], @cube[9...12], @cube[3...6]
-    @cube
+    cube[0...3], cube[3...6], cube[6...9], cube[9...12] = cube[6...9], cube[0...3], cube[9...12], cube[3...6]
+    cube
   end
 
   def front_counterclockwise
-
+    cube[0...3], cube[3...6], cube[6...9], cube[9...12] = cube[3...6], cube[9...12], cube[0...3], cube[6...9]
+    cube
   end
 
   def left_clockwise
+    # [0,1,2,     3,4,5,    6,7,8,    9,10,11,    12,13,14,   15,16,17,   18,19,20,   21,22,23]
+    # [13,14,12,  3,4,5,    2,0,1,    9,10,11,    20,18,19,   15,16,17,   7,8,6,      21,22,23]
 
+    cube[0], cube[1], cube[2], 
+    cube[6], cube[7], cube[8], 
+    cube[12], cube[13], cube[14],
+    cube[18], cube[19], cube[20] =  cube[13], cube[14], cube[12], 
+                                    cube[2], cube[0], cube[1],
+                                    cube[20], cube[18], cube[19],
+                                    cube[7], cube[8], cube[6]
+    cube
   end
 
   def left_counterclockwise
+    # [0,1,2,    3,4,5,   6,7,8,     9,10,11,   12,13,14,   15,16,17,    18,19,20,     21,22,23]
+    # [7,8,6,    3,4,5,   20,18,19,  9,10,11,   2,0,1,      15,16,17,    13,14,12,     21,22,23]
 
+    cube[0], cube[1], cube[2], 
+    cube[6], cube[7], cube[8], 
+    cube[12], cube[13], cube[14],
+    cube[18], cube[19], cube[20] =  cube[7], cube[8], cube[6],
+                                    cube[20], cube[18], cube[19], 
+                                    cube[2], cube[0], cube[1],
+                                    cube[13], cube[14], cube[12]
+                                    
+    cube
   end
 
   def up_clockwise
+    # [0,1,2,   3,4,5,      6,7,8,   9,10,11,  12,13,14,  15,16,17,   18,19,20,  21,22,23]
+    # [5,3,4,   16,17,15,   6,7,8,   9,10,11,  1,2,0,     14,12,13,   18,19,20,  21,22,23]
 
+    cube[0], cube[1], cube[2], 
+    cube[3], cube[4], cube[5], 
+    cube[12], cube[13], cube[14],
+    cube[15], cube[16], cube[17] =  cube[5], cube[3], cube[4],
+                                    cube[16], cube[17], cube[15], 
+                                    cube[1], cube[2], cube[0],
+                                    cube[14], cube[12], cube[13]
+                                    
+    cube
   end
 
   def up_counterclockwise
+    # [0,1,2,     3,4,5,      6,7,8,   9,10,11,  12,13,14,  15,16,17,   18,19,20,  21,22,23]
+    # [14,12,13   1,2,0       6,7,8    9,10,11,  16,17,15   5,3,4       18,19,20,  21,22,23]
 
+    cube[0], cube[1], cube[2], 
+    cube[3], cube[4], cube[5], 
+    cube[12], cube[13], cube[14],
+    cube[15], cube[16], cube[17] =  cube[14], cube[12], cube[13],
+                                    cube[1], cube[2], cube[0], 
+                                    cube[16], cube[17], cube[15],
+                                    cube[5], cube[3], cube[4]
+                                    
+    cube
   end
-
 
 end

@@ -9,10 +9,16 @@ class RubikCube
   #  "back_left_down", "left_down_back", "down_back_left", 
   #  "back_down_right", "down_right_back", "right_back_down"]
 
-
   attr_accessor :cube
 
-  DEFAULT_CUBE = ["rgw","gwr","wrg","rwb","wbr","brw","ryg","ygr","gry","rby","byr","yrb","owg","wgo","gow","obw","bwo","wob","ogy","gyo","yog","oyb","ybo","boy"]
+  DEFAULT_CUBE = ["rgw","gwr","wrg",
+                  "rwb","wbr","brw",
+                  "ryg","ygr","gry",
+                  "rby","byr","yrb",
+                  "owg","wgo","gow",
+                  "obw","bwo","wob",
+                  "ogy","gyo","yog",
+                  "oyb","ybo","boy"]
 
   def initialize(cube_configuration = DEFAULT_CUBE)
     @cube = cube_configuration

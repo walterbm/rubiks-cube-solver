@@ -5,6 +5,8 @@ class RubikSolver
 
   TEST_CUBE = ["ryg", "ygr", "gry", "rgw", "gwr", "wrg", "rby", "byr", "yrb", "rwb", "wbr", "brw", "owg", "wgo", "gow", "obw", "bwo", "wob", "ogy", "gyo", "yog", "oyb", "ybo", "boy"]
   
+  attr_accessor :move_history, :past_moves
+
   def initialize(start_cube = TEST_CUBE)
     @start_cube = RubikCube.new(start_cube)
     @node_queue = []
@@ -45,7 +47,7 @@ class RubikSolver
       puts "working"
     end
     puts "solved!"
-    @move_history
+    self
   end
 
   def solved?

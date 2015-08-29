@@ -29,8 +29,8 @@ class RubikSolver
     @forward_node_queue << Node.new({move: move, cube: to},from)
   end
 
-  def move
-    @current_move = @forward_node_queue.shift
+  def move(queue)
+    @current_move = queue.shift
     neighbors(@current_move).each do |neighbor|
       add_to_queues(neighbor[:move], neighbor[:cube],@current_move)
     end
@@ -39,7 +39,7 @@ class RubikSolver
   def solve
     add_to_queues("start", @start_cube)
     loop do
-      move
+      move(@forward_node_queue)
       break if solved?
       puts "working"
     end
@@ -59,7 +59,7 @@ class RubikSolver
         break if node.back == nil
         node = node.back
       end
-    end
+    end.reverse
   end
 
 end

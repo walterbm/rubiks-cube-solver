@@ -2,14 +2,23 @@ require "rails_helper"
 
 RSpec.describe RubikCube, :type => :model do
 
+  def test_solution(start, solution_moves)
+    solution_moves.delete("start")
+    solution_moves.each do |move|
+      start.turn(move)
+    end
+    start == RubikCube.new
+  end
+
   it "solves an already solved cube" do 
     start = RubikCube.new
 
     solver = RubikSolver.new(start.cube)
     solver.solve
     solution_moves = solver.solution_manual
-
+    
     expect(solution_moves.size).to eq(1)
+    expect(test_solution(start,solution_moves)).to eq(true)
   end
 
   it "solves a cube 1 move removed" do
@@ -21,6 +30,7 @@ RSpec.describe RubikCube, :type => :model do
     solution_moves = solver.solution_manual
 
     expect(solution_moves.size).to eq(2)
+    expect(test_solution(start,solution_moves)).to eq(true)
   end
 
   it "solves a cube 2 moves removed" do
@@ -33,6 +43,7 @@ RSpec.describe RubikCube, :type => :model do
     solution_moves = solver.solution_manual
 
     expect(solution_moves.size).to eq(3)
+    expect(test_solution(start,solution_moves)).to eq(true)
   end
 
   it "solves a cube 3 moves removed" do
@@ -46,6 +57,7 @@ RSpec.describe RubikCube, :type => :model do
     solution_moves = solver.solution_manual
     
     expect(solution_moves.size).to eq(4)
+    expect(test_solution(start,solution_moves)).to eq(true)
   end
 
   it "solves a cube 4 moves removed" do
@@ -60,6 +72,7 @@ RSpec.describe RubikCube, :type => :model do
     solution_moves = solver.solution_manual
     
     expect(solution_moves.size).to eq(5)
+    expect(test_solution(start,solution_moves)).to eq(true)
   end
 
   xit "solves a cube 14 moves removed" do

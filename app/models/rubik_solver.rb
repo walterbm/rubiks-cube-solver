@@ -1,57 +1,65 @@
 class RubikSolver
   SOLVED_CUBE = RubikCube.new(["rgw","gwr","wrg","rwb","wbr","brw","ryg","ygr","gry","rby","byr","yrb","owg","wgo","gow","obw","bwo","wob","ogy","gyo","yog","oyb","ybo","boy"])
-
-  # TEST_CUBE = ["gyo","yog","ogy","gow","owg","wgo","gry","ryg","ygr","rwb","wbr","brw","bwo","wob","obw","wrg","rgw","gwr","byr","yrb","rby","oyb","ybo","boy"]
-
-  TEST_CUBE = ["ryg", "ygr", "gry", "rgw", "gwr", "wrg", "rby", "byr", "yrb", "rwb", "wbr", "brw", "owg", "wgo", "gow", "obw", "bwo", "wob", "ogy", "gyo", "yog", "oyb", "ybo", "boy"]
   
   attr_accessor :move_history, :past_moves
 
   def initialize(start_cube = TEST_CUBE)
     @start_cube = RubikCube.new(start_cube)
-    @node_queue = []
+
+    @forward_node_queue = []
+    @backward_node_queue = []
+
     @past_moves = []
-    @move_history = []
   end
 
-  def neighbors(current)
+  def neighbors(current_node)
+    current = current_node.data_cube
     current.move_set.collect do |move|
       new_cube = RubikCube.new(current.cube).turn(move)
-      valid_move?(new_cube) ? new_cube : nil
+      valid_move?(new_cube) ? {move: move, cube: new_cube} : nil
     end.compact
   end
 
-  def valid_move?(new_cube)
-    !@past_moves.include?(new_cube)
+  def valid_move?(cube)
+    !@past_moves.include?(cube)
   end
 
-  def add_to_queues(to, from = @start_cube)
-    if !@past_moves.include?(to)
-      @past_moves << to
-      @node_queue << to
-      @move_history << [to, from]
-    end
+  def add_to_queues(move, to, from = nil)
+    @past_moves << to
+    @forward_node_queue << Node.new({move: move, cube: to},from)
   end
 
   def move
-    current = @node_queue.shift
-    neighbors(current).each do |neighbor|
-      add_to_queues(neighbor,current)
+    @current_move = @forward_node_queue.shift
+    neighbors(@current_move).each do |neighbor|
+      add_to_queues(neighbor[:move], neighbor[:cube],@current_move)
     end
   end
 
   def solve
-    add_to_queues(@start_cube)
-    until solved?
+    add_to_queues("start", @start_cube)
+    loop do
       move
+      break if solved?
       puts "working"
     end
     puts "solved!"
-    self
+    solution_manual
   end
 
   def solved?
-    @past_moves.include?(SOLVED_CUBE)
+    @current_move.data_cube == SOLVED_CUBE
+  end
+
+  def solution_manual
+    node = @current_move
+    @solution_manual ||= Array.new.tap do |solution_array|
+      loop do 
+        solution_array << node.data_move
+        break if node.back == nil
+        node = node.back
+      end
+    end
   end
 
 end

@@ -1,10 +1,14 @@
 class Node
-  attr_accessor :data, :back, :next
+  attr_reader :data, :data_cube, :data_move
+  attr_accessor :back
 
-  def initialize (data, back_node = nil, next_node = nil)
+
+  def initialize (data, back_node = nil)
     @data = data
-    @next = next_node
     @back = back_node
+
+    @data_cube = data.has_key?(:cube) ? @data[:cube] : nil
+    @data_move = data.has_key?(:move) ? @data[:move] : nil
   end
 
 end

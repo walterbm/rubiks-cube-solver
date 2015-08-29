@@ -11,5 +11,9 @@ class Node
     @data_move = data.has_key?(:move) ? @data[:move] : nil
   end
 
+  def == (node)
+    self.data_cube == node.data_cube
+  end
+
 end
 

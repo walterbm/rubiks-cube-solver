@@ -13,4 +13,20 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
-//= require_tree .
+
+//= require three.min.js
+//= require Detector.js
+//= require helvetiker_regular.typeface.js
+//= require OrbitControls.js
+//= require SceneUtils.js
+//= require scramble_333.js
+
+//= require Utils.js
+//= require Text.js
+//= require Cubies.js
+//= require Event.js
+//= require Info.js
+//= require Init.js
+//= require Animate.js
+//= require Rotate.js
+//= require Scramble.js

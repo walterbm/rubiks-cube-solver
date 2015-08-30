@@ -16,33 +16,33 @@ class RubikSolver
     current = current_node.data_cube
     current.move_set.collect do |move|
       new_cube = RubikCube.new(current.cube).turn(move)
-      {move: move, cube: new_cube}
+      Node.new({move: move, cube: new_cube},current_node)
     end
   end
 
-  def valid_forward_move?(cube)
-    !@past_forward_moves.include?(cube)
+  def valid_forward_move?(node)
+    !@past_forward_moves.include?(node)
   end
 
-  def valid_backward_move?(cube)
-    !@past_backward_moves.include?(cube)
+  def valid_backward_move?(node)
+    !@past_backward_moves.include?(node)
   end
 
-  def add_to_forward_queues(move, to, from = nil)
-    @past_forward_moves << to
-    @forward_queue << Node.new({move: move, cube: to},from)
+  def add_to_forward_queues(node)
+    @past_forward_moves << node
+    @forward_queue << node
   end
 
-  def add_to_backward_queues(move, to, from = nil)
-    @past_backward_moves << to
-    @backward_queue << Node.new({move: move, cube: to},from)
+  def add_to_backward_queues(node)
+    @past_backward_moves << node
+    @backward_queue << node
   end
 
   def move_forward
     current_forward_move = @forward_queue.shift
     neighbors(current_forward_move).each do |neighbor|
-      if valid_forward_move?(neighbor[:cube])
-        add_to_forward_queues(neighbor[:move], neighbor[:cube],current_forward_move)
+      if valid_forward_move?(neighbor)
+        add_to_forward_queues(neighbor)
       end
     end
   end
@@ -50,15 +50,16 @@ class RubikSolver
   def move_backwards
     current_backward_move = @backward_queue.shift
     neighbors(current_backward_move).each do |neighbor|
-      if valid_backward_move?(neighbor[:cube])
-        add_to_backward_queues(neighbor[:move], neighbor[:cube],current_backward_move)
+      if valid_backward_move?(neighbor)
+        add_to_backward_queues(neighbor)
       end
     end
   end
 
   def solve
-    add_to_forward_queues("start", @start_cube)
-    add_to_backward_queues("solved", SOLVED_CUBE)
+    add_to_forward_queues(Node.new({move: "start", cube: @start_cube}) )
+    add_to_backward_queues(Node.new({move:"solved", cube: SOLVED_CUBE}) )
+
     until queues_empty?
 
       break if solved?
@@ -71,7 +72,7 @@ class RubikSolver
   end
 
   def solved?
-    @forward_queue.any? { |move| @backward_queue.include?(move) }
+    @past_forward_moves.any? { |move| @past_backward_moves.include?(move) }
   end
 
   def queues_empty?
@@ -79,8 +80,8 @@ class RubikSolver
   end
 
   def find_queue_overlap
-    @forward_queue.each do |move|
-       @forward_move, @backward_move = move, @backward_queue[@backward_queue.index(move)] if @backward_queue.include?(move)
+    @past_forward_moves.each do |move|
+       @forward_move, @backward_move = move, @past_backward_moves[@past_backward_moves.index(move)] if @past_backward_moves.include?(move)
     end
   end
 

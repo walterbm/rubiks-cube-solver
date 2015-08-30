@@ -28,65 +28,71 @@ class RubikSolver
     !@past_backward_moves.include?(cube)
   end
 
-  def add_to_forwards_queues(move, to, from = nil)
+  def add_to_forward_queues(move, to, from = nil)
     @past_forward_moves << to
     @forward_queue << Node.new({move: move, cube: to},from)
   end
 
-  def add_to_backwards_queues(move, to, from = nil)
+  def add_to_backward_queues(move, to, from = nil)
     @past_backward_moves << to
     @backward_queue << Node.new({move: move, cube: to},from)
   end
 
   def move_forward
-    @forward_move = @forward_queue.shift
-    neighbors(@forward_move).each do |neighbor|
+    current_forward_move = @forward_queue.shift
+    neighbors(current_forward_move).each do |neighbor|
       if valid_forward_move?(neighbor[:cube])
-        add_to_forwards_queues(neighbor[:move], neighbor[:cube],@forward_move)
+        add_to_forward_queues(neighbor[:move], neighbor[:cube],current_forward_move)
       end
     end
   end
 
   def move_backwards
-    @backward_move = @backward_queue.shift
-    neighbors(@backward_move).each do |neighbor|
+    current_backward_move = @backward_queue.shift
+    neighbors(current_backward_move).each do |neighbor|
       if valid_backward_move?(neighbor[:cube])
-        add_to_backwards_queues(neighbor[:move], neighbor[:cube],@backward_move)
+        add_to_backward_queues(neighbor[:move], neighbor[:cube],current_backward_move)
       end
     end
   end
 
   def solve
-    add_to_forwards_queues("start", @start_cube)
-    add_to_backwards_queues("solved", SOLVED_CUBE)
+    add_to_forward_queues("start", @start_cube)
+    add_to_backward_queues("solved", SOLVED_CUBE)
     until queues_empty?
-
-      move_forward
-      move_backwards
-      binding.pry
 
       break if solved?
 
-      puts "working"
+      move_forward if @forward_queue
+      move_backwards if @backward_queue
+
     end
-    binding.pry
     solution_manual
   end
 
   def solved?
-    @past_forward_moves.any? do |move|
-      @past_backward_moves.include?(move)
-    end
+    @forward_queue.any? { |move| @backward_queue.include?(move) }
   end
 
   def queues_empty?
     @forward_queue.nil? && @backward_queue.nil?
   end
 
+  def find_queue_overlap
+    @forward_queue.each do |move|
+       @forward_move, @backward_move = move, @backward_queue[@backward_queue.index(move)] if @backward_queue.include?(move)
+    end
+  end
+
   def solution_manual
-    forward_chain = build_chain(@forward_move)
-    backward_chain = build_chain(@backward_move)
+    find_queue_overlap
+    forward_chain = build_chain(@forward_move).reverse
+    backward_chain = inverse_moves(build_chain(@backward_move))
     @solution_manual ||= forward_chain + backward_chain
+  end
+
+  def inverse_moves(backward_chain)
+    backward_chain.collect { |move| move.include?("counter") ? move.gsub("counter",'') : move.gsub("_","_counter") }
   end
 
   def build_chain(current_node)

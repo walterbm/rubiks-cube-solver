@@ -131,7 +131,7 @@ RSpec.describe RubikCube, :type => :model do
     expect(test_solution(start,solution_moves)).to eq(true)
   end
 
-  it "solves a cube 14 moves removed" do
+  xit "solves a cube 14 moves removed" do
     start = RubikCube.new([6,7,8,20,18,19,3,4,5,16,17,15,0,1,2,14,12,13,10,11,9,21,22,23])
 
     solver = RubikSolver.new(start.cube)

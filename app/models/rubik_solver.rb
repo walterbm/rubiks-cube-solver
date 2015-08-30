@@ -16,16 +16,12 @@ class RubikSolver
     current = current_node.data_cube
     current.move_set.collect do |move|
       new_cube = RubikCube.new(current.cube).turn(move)
-      Node.new({move: move, cube: new_cube},current_node)
+      Node.new({move: move, cube: new_cube}, current_node)
     end
   end
 
-  def valid_forward_move?(node)
-    !@past_forward_moves.include?(node)
-  end
-
-  def valid_backward_move?(node)
-    !@past_backward_moves.include?(node)
+  def valid_move?(move_history, node)
+    !move_history.include?(node)
   end
 
   def add_to_forward_queues(node)
@@ -41,7 +37,7 @@ class RubikSolver
   def move_forward
     current_forward_move = @forward_queue.shift
     neighbors(current_forward_move).each do |neighbor|
-      if valid_forward_move?(neighbor)
+      if valid_move?(@past_forward_moves,neighbor)
         add_to_forward_queues(neighbor)
       end
     end
@@ -50,7 +46,7 @@ class RubikSolver
   def move_backwards
     current_backward_move = @backward_queue.shift
     neighbors(current_backward_move).each do |neighbor|
-      if valid_backward_move?(neighbor)
+      if valid_move?(@past_backward_moves,neighbor)
         add_to_backward_queues(neighbor)
       end
     end
@@ -66,8 +62,8 @@ class RubikSolver
 
       move_forward if @forward_queue
       move_backwards if @backward_queue
-
     end
+
     solution_manual
   end
 
@@ -96,8 +92,8 @@ class RubikSolver
     backward_chain.collect { |move| move.include?("counter") ? move.gsub("counter",'') : move.gsub("_","_counter") }
   end
 
-  def build_chain(current_node)
-    node = current_node
+  def build_chain(direction_node)
+    node = direction_node
     Array.new.tap do |solution_array|
       loop do 
         solution_array << node.data_move

@@ -1,0 +1,40 @@
+<!--    Rubik Cube Viewer  implementation in HTML 5 canvas, Javascript Three.js 3D Library
+        Based on previous implementation of Rubik Cube Viewer by Nikos M. [https://github.com/foo123]
+-->
+
+<div id='controls' style='position:absolute;z-index:100;top: 0; left: 0; width:200px;margin:0;padding:0'>
+    <div id='pad' style="background-image:url('assets/pad.jpg');width:100px;height:100px;position:relative;cursor:pointer;">
+        <div id='cross' style="position:absolute;width:20px;height:20px;top:40px;left:40px;background:transparent url('assets/cross.png'); no-repeat 0 0"></div>
+    </div>
+    
+    <div>
+        <input class="button" type='button' id='newrubik' value='New Cube'/>
+        <input class="button" type='button' id='scramble' value='Scramble'/>
+        <input class="button" type='button' id='undo' value='Undo'/>
+        <br />        
+    </div>
+    
+    <div id='colors' style="position:relative;">
+        <div class='color-class colorSelector'><div id='cstop1'></div></div>
+        <div class='color-class colorSelector'><div id='csbottom1'></div></div>
+        <div class='color-class colorSelector'><div id='csleft1'></div></div>
+        <div style="float:none;clear:both"></div>
+        <div class='color-class colorSelector'><div id='csright1'></div></div>
+        <div class='color-class colorSelector'><div id='csfront1'></div></div>
+        <div class='color-class colorSelector'><div id='csback1'></div></div>
+        <div style="float:none;clear:both"></div>
+        
+        <br /><br />
+        
+        <div class='color-class colorSelector'><div id='csinside1'></div></div>
+        <div style="float:none;clear:both"></div>
+    </div>
+</div>
+
+<div id="flatimage" style="position:absolute;z-index:10;bottom:50px;right:5px;"></div>
+
+<div id="container" style="position:relative;margin:0 auto;padding:0;z-index:0;cursor:pointer;"></div>
+  
+<script>//<![CDATA[
+RubikApplication.init();
+//]]></script>

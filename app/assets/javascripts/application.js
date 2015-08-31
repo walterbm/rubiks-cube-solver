@@ -13,4 +13,10 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
-//= require_tree .
+
+//= require three_old.js
+//= require Tween.js
+//= require colorpicker.min.js
+
+//= require Rubik.js
+//= require RubikApplication.js

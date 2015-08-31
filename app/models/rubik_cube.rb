@@ -34,6 +34,10 @@ class RubikCube
     end
   end
 
+  def to_s
+    self.cube.join('')
+  end
+
   def turn(direction)
     self.send(direction)
     self

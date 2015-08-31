@@ -15,7 +15,6 @@ RSpec.describe RubikCube, :type => :model do
     expect(@test_cube.turn("front_counterclockwise").cube).to eq([3,4,5,9,10,11,0,1,2,6,7,8,12,13,14,15,16,17,18,19,20,21,22,23])
   end
 
-
   it "rotates the left face clockwise" do 
     expect(@test_cube.turn("left_clockwise").cube).to eq([13,14,12,3,4,5,2,0,1,9,10,11,20,18,19,15,16,17,7,8,6,21,22,23])
   end
@@ -96,6 +95,12 @@ RSpec.describe RubikCube, :type => :model do
     @test_cube.turn("up_counterclockwise")
     @test_cube.turn("up_counterclockwise")
     expect(@test_cube.cube).to eq([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23])
+  end
+
+  it 'can return the cube array as a single String' do
+    cube = RubikCube.new
+    string_cube = "rgwgwrwrgrwbwbrbrwrygygrgryrbybyryrbowgwgogowobwbwowobogygyoyogoybyboboy"
+    expect(cube.to_s).to eq(string_cube)
   end
 
 end

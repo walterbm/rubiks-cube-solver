@@ -8,8 +8,8 @@ class RubikSolver
     @forward_queue = []
     @backward_queue = []
 
-    @past_forward_moves = []
-    @past_backward_moves = []
+    @past_forward_moves = {}
+    @past_backward_moves = {}
   end
 
   def neighbors(current_node)
@@ -21,16 +21,16 @@ class RubikSolver
   end
 
   def valid_move?(move_history, node)
-    !move_history.include?(node)
+    !move_history.has_key?(node.data_cube.to_s)
   end
 
   def add_to_forward_queues(node)
-    @past_forward_moves << node
+    @past_forward_moves[node.data_cube.to_s] = node
     @forward_queue << node
   end
 
   def add_to_backward_queues(node)
-    @past_backward_moves << node
+    @past_backward_moves[node.data_cube.to_s] = node
     @backward_queue << node
   end
 
@@ -60,24 +60,24 @@ class RubikSolver
 
       break if solved?
 
-      move_forward if @forward_queue
-      move_backwards if @backward_queue
+      move_forward unless @forward_queue.empty?
+      move_backwards unless @backward_queue.empty?
     end
 
     solution_manual
   end
 
   def solved?
-    @past_forward_moves.any? { |move| @past_backward_moves.include?(move) }
+    @past_forward_moves.any? { |move_key, move| @past_backward_moves.has_key?(move_key) }
   end
 
   def queues_empty?
-    @forward_queue.nil? && @backward_queue.nil?
+    @forward_queue.empty? && @backward_queue.empty?
   end
 
   def find_queue_overlap
-    @past_forward_moves.each do |move|
-       @forward_move, @backward_move = move, @past_backward_moves[@past_backward_moves.index(move)] if @past_backward_moves.include?(move)
+    @past_forward_moves.each do |move_key, move|
+       @forward_move, @backward_move = move, @past_backward_moves[move_key] if @past_backward_moves.has_key?(move_key)
     end
   end
 

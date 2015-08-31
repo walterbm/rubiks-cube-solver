@@ -131,6 +131,37 @@ RSpec.describe RubikCube, :type => :model do
     expect(test_solution(start,solution_moves)).to eq(true)
   end
 
+  it "solves a cube 12 moves removed" do
+    start = RubikCube.new
+    start.turn("front_clockwise")
+    start.turn("left_clockwise")
+    start.turn("front_clockwise")
+    start.turn("left_clockwise")
+    start.turn("front_clockwise")
+    start.turn("left_clockwise")
+    start.turn("front_clockwise")
+    start.turn("left_clockwise")
+    start.turn("front_clockwise")
+    start.turn("left_clockwise")
+    start.turn("up_clockwise")
+    start.turn("left_clockwise")
+    start.turn("up_clockwise")
+    start.turn("front_clockwise")
+    start.turn("front_clockwise")
+    start.turn("left_clockwise")
+    start.turn("up_clockwise")
+    start.turn("left_clockwise")
+
+    solver = RubikSolver.new(start.cube)
+    solver.solve
+    solution_moves = solver.solution_manual
+    solution_moves.delete("start")
+    solution_moves.delete("solved")
+    
+    expect(solution_moves.size).to eq(12)
+    expect(test_solution(start,solution_moves)).to eq(true)
+  end
+
   xit "solves a cube 14 moves removed" do
     start = RubikCube.new([6,7,8,20,18,19,3,4,5,16,17,15,0,1,2,14,12,13,10,11,9,21,22,23])
 
@@ -146,6 +177,14 @@ RSpec.describe RubikCube, :type => :model do
 
   xit "does not solve an impossible cube" do
     impossible_cube = RubikCube.new([7,8,6,20,18,19,3,4,5,16,17,15,0,1,2,14,12,13,10,11,9,21,22,23])
+
+    solver = RubikSolver.new(impossible_cube.cube)
+    solver.solve
+    solution_moves = solver.solution_manual
+    solution_moves.delete("start")
+    solution_moves.delete("solved")
+
+    expect(solution_moves.size).to eq(0)
   end
 
 end

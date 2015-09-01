@@ -1,9 +1,10 @@
 ﻿/**
 *   Rubik3
-*   An intuitive rubik cube class based on Three.js
+*   A rubik cube class based on Three.js
 *
-*   https://github.com/foo123/Rubik3
+*   by Nikos M. [https://github.com/foo123]
 **/
+
 (function(window, undef){
 
 // utils
@@ -92,12 +93,12 @@ var Rubik = Extends(THREE.Object3D, {
             // mutually complementary colors
             colors = {
                 inside: 0x2c2c2c,
-                top: 0xFF00FF,
-                bottom: 0x00FF00,
-                left: 0xFFFF00,
-                right: 0x0000FF,
-                front: 0xFF0000,
-                back: 0x00FFFF
+                top: 0xFFFFFF,
+                bottom: 0xFFD500,
+                left: 0x009E60,
+                right: 0x0051BA,
+                front: 0xC41E3A,
+                back: 0xFF5800
             }
         ;
         

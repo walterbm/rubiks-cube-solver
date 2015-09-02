@@ -18,5 +18,5 @@
 //= require Tween.js
 //= require colorpicker.min.js
 
-//= require Rubik.js
-//= require RubikApplication.js
+//= require rubik.min.js
+//= require rubikApplication.js

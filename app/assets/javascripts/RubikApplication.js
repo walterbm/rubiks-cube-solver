@@ -6,21 +6,15 @@
      */
 
     if ( !window.requestAnimationFrame ) {
-
         window.requestAnimationFrame = ( function() {
-
             return window.webkitRequestAnimationFrame ||
             window.mozRequestAnimationFrame ||
             window.oRequestAnimationFrame ||
             window.msRequestAnimationFrame ||
             function( /* function FrameRequestCallback */ callback, /* DOMElement Element */ element ) {
-
                 window.setTimeout( callback, 1000 / 60 );
-
             };
-
         } )();
-
     }
     
     var 
@@ -33,7 +27,7 @@
 
         rubikcube,
 
-        targetRotationY = 0, targetRotationOnMouseDownY = 0, targetRotationX = 0, targetRotationOnMouseDownX = 0,
+        targetRotationY = -0.25, targetRotationOnMouseDownY = 0, targetRotationX = 0.25, targetRotationOnMouseDownX = 0,
         rad = 500, mouse = {x:0,y:0}, mouseX = 0, mouseXOnMouseDown = 0, mouseY = 0, mouseYOnMouseDown = 0,
 
         windowHalfX = window.innerWidth / 2, windowHalfY = window.innerHeight / 2,
@@ -104,7 +98,7 @@
     function onPadMouseMove( event ) 
     {
         if (event.clientX>padw || event.clientX<0 || event.clientY>padh || event.clientY<0) return;
-     
+        
         mouseX=(( event.clientX / padw ) * 2 - 1);
         targetRotationY=mouseX;
         mouseY=(( event.clientY / padh ) * 2 - 1);
@@ -159,7 +153,47 @@
         renderer.render( scene, camera );
     }
 
-    var self={
+    function turnCubeFace(direction){
+        var faces = {
+            "front_clockwise" : {axis:"z",row:1,angle:-1,duration:1},
+            "front_counterclockwise": {axis:"z",row:1,angle:1,duration:1},
+            "left_clockwise": {axis:"x",row:0,angle:1,duration:1},
+            "left_counterclockwise": {axis:"x",row:0,angle:-1,duration:1},
+            "up_clockwise": {axis:"y",row:1,angle:-1,duration:1},
+            "up_counterclockwise": {axis:"y",row:1,angle:1,duration:1},
+            "back_clockwise": {axis:"z",row:0,angle:1,duration:1},
+            "back_counterclockwise": {axis:"z",row:0,angle:-1,duration:1},
+            "bottom_clockwise": {axis:"y",row:0,angle:1,duration:1},
+            "bottom_counterclockwise": {axis:"y",row:0,angle:-1,duration:1},
+            "right_clockwise": {axis:"x",row:1,angle:1,duration:1},
+            "right_counterclockwise": {axis:"x",row:1,angle:-1,duration:1}
+        };
+
+        return faces[direction];
+    }
+
+    function addKeyListeners(key){
+        var keyCode = key.keyCode;
+
+        var keyboard = {
+            113: function(){rubikcube.rotate(turnCubeFace("front_clockwise"));},            // q
+            119: function(){rubikcube.rotate(turnCubeFace("front_counterclockwise"));},     // w
+            97: function(){rubikcube.rotate(turnCubeFace("left_clockwise"));},              // a
+            115: function(){rubikcube.rotate(turnCubeFace("left_counterclockwise"));},      // s
+            100: function(){rubikcube.rotate(turnCubeFace("right_clockwise"));},            // d
+            102: function(){rubikcube.rotate(turnCubeFace("right_counterclockwise"));},     // f
+            122: function(){rubikcube.rotate(turnCubeFace("up_clockwise"));},               // z
+            120: function(){rubikcube.rotate(turnCubeFace("up_counterclockwise"));},        // x
+            99: function(){rubikcube.rotate(turnCubeFace("bottom_clockwise"));},            // c
+            118: function(){rubikcube.rotate(turnCubeFace("bottom_counterclockwise"));},    // v
+            101: function(){rubikcube.rotate(turnCubeFace("back_clockwise"));},             // e
+            114: function(){rubikcube.rotate(turnCubeFace("back_counterclockwise"));},      // r
+        };
+   
+        keyboard[keyCode]();
+    }
+
+    var self = {
     
         init : function() {
             
@@ -197,75 +231,8 @@
 
             container.appendChild( renderer.domElement );
 
-            $(document).keypress(function(e) {
-                var keyCode = e.keyCode;
-
-                if(keyCode == 87 || keyCode == 119){
-                    console.log("You pressed w/W!");
-                    // FRONT COUNTER CLOCKWISE
-                    rubikcube.rotate({axis:"z",row:1,angle:1,duration:2});
-                }
-                if(keyCode == 88 || keyCode == 120){
-                    console.log("You pressed X/x!");
-                    // FRONT CLOCKWISE
-                    rubikcube.rotate({axis:"z",row:1,angle:-1,duration:2});
-                }
-
-                if(keyCode == 111 || keyCode == 79){
-                    console.log("You pressed o/O!");
-                    // BACK CLOCKWISE
-                    rubikcube.rotate({axis:"z",row:0,angle:1,duration:2});
-                }
-                if(keyCode == 112 || keyCode == 80){
-                    console.log("You pressed p/P!");
-                    // BACK COUNTER CLOCKWISE
-                    rubikcube.rotate({axis:"z",row:0,angle:-1,duration:2});
-                }
-
-                if(keyCode == 97 || keyCode == 65){
-                    console.log("You pressed a/A!");
-                    // TOP COUNTER CLOCKWISE
-                    rubikcube.rotate({axis:"y",row:1,angle:1,duration:2});
-                }
-                if(keyCode == 115 || keyCode == 83){
-                    console.log("You pressed s/S!");
-                    // TOP CLOCKWISE
-                    rubikcube.rotate({axis:"y",row:1,angle:-1,duration:2});
-                }
-
-                if(keyCode == 98 || keyCode == 66){
-                    console.log("You pressed b/B!");
-                    // BOTTOM COUNTER CLOCKWISE
-                    rubikcube.rotate({axis:"y",row:0,angle:-1,duration:2});
-                }
-                if(keyCode == 110 || keyCode == 78){
-                    console.log("You pressed n/N!");
-                    // BOTTOM CLOCKWISE
-                    rubikcube.rotate({axis:"y",row:0,angle:1,duration:2});
-                }
-
-                if(keyCode == 116 || keyCode == 84){
-                    console.log("You pressed T/t!");
-                    // RIGHT COUNTER CLOCKWISE
-                    rubikcube.rotate({axis:"x",row:1,angle:1,duration:2});
-                }
-                if(keyCode == 121 || keyCode == 89){
-                    console.log("You pressed y/Y!");
-                    // RIGHT CLOCKWISE
-                    rubikcube.rotate({axis:"x",row:1,angle:-1,duration:2});
-                }
-
-                if(keyCode == 106 || keyCode == 74){
-                    console.log("You pressed j/J!");
-                    // LEFT COUNTER CLOCKWISE
-                    rubikcube.rotate({axis:"x",row:0,angle:-1,duration:2});
-                }
-                if(keyCode == 107 || keyCode == 75){
-                    console.log("You pressed k/K!");
-                    // LEFT CLOCKWISE
-                    rubikcube.rotate({axis:"x",row:0,angle:1,duration:2});
-                }
-     
+            $(document).keypress(function(key){
+                addKeyListeners(key);
             });
 
             
@@ -289,11 +256,15 @@
             animate();
         },
         
-        animate : animate
+        animate : animate,
+
+        turnCube : function(direction){
+                    rubikcube.rotate(turnCubeFace(direction));
+        }            
     
     };
     
-    // export it
+    // export RubikApp Object
     window.RubikApplication = self;
     
 })(window, jQuery);

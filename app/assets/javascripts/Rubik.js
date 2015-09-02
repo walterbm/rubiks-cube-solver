@@ -388,7 +388,7 @@ var Rubik = Extends(THREE.Object3D, {
                     
         this.rotation_in_progress = true;
         
-        tweenDuration = Math.abs(angle) * duration * 1000; 
+        tweenDuration = Math.abs(angle) * duration * 200; 
         tweenAngle = angle * this.RA;
         
         for (var k=0; k<ind.length; k++)

@@ -88,6 +88,7 @@ var Rubik = Extends(THREE.Object3D, {
             front: 4,
             back: 5
         };
+
         
         var side = 200, N = 3, dsp = 0.3,
             // mutually complementary colors
@@ -224,6 +225,70 @@ var Rubik = Extends(THREE.Object3D, {
             this.undolist.push( actionobj );
         }
         return this;
+    },
+
+    getCubeStateAsString : function(){
+        var cube = this;
+        var facesArray = ['front','left','top','right','back','bottom'], cubeStateArray = [], cubelet;
+
+        //   0     1     2    
+        // "rgw","gwr","wrg",        
+        cubelet = cube.getFaceColorAndIndex("front",0,0).color_code + cube.getFaceColorAndIndex("left",0,0).color_code + cube.getFaceColorAndIndex("top",1,0).color_code;
+        cubeStateArray[0] = cubelet;
+        cubeStateArray[1] = cubelet[1] + cubelet[2] + cubelet [0];
+        cubeStateArray[2] = cubelet[2] + cubelet[0] + cubelet [1];
+
+        //   3     4     5
+        // "rwb","wbr","brw",
+        cubelet = cube.getFaceColorAndIndex("front",0,1).color_code + cube.getFaceColorAndIndex("top",1,1).color_code + cube.getFaceColorAndIndex("right",0,1).color_code;
+        cubeStateArray[3] = cubelet;
+        cubeStateArray[4] = cubelet[1] + cubelet[2] + cubelet [0];
+        cubeStateArray[5] = cubelet[2] + cubelet[0] + cubelet [1];
+
+        //   6     7     8
+        // "ryg","ygr","gry",
+        cubelet = cube.getFaceColorAndIndex("front",1,0).color_code + cube.getFaceColorAndIndex("bottom",0,0).color_code + cube.getFaceColorAndIndex("left",1,0).color_code;
+        cubeStateArray[6] = cubelet;
+        cubeStateArray[7] = cubelet[1] + cubelet[2] + cubelet [0];
+        cubeStateArray[8] = cubelet[2] + cubelet[0] + cubelet [1];
+        
+        //   9    10    11
+        // "rby","byr","yrb",
+        cubelet = cube.getFaceColorAndIndex("front",1,1).color_code + cube.getFaceColorAndIndex("right",1,1).color_code + cube.getFaceColorAndIndex("bottom",0,1).color_code;
+        cubeStateArray[9] = cubelet;
+        cubeStateArray[10] = cubelet[1] + cubelet[2] + cubelet [0];
+        cubeStateArray[11] = cubelet[2] + cubelet[0] + cubelet [1];
+
+        //  12    13    14
+        // "owg","wgo","gow",
+        cubelet = cube.getFaceColorAndIndex("back",0,1).color_code + cube.getFaceColorAndIndex("top",0,0).color_code + cube.getFaceColorAndIndex("left",0,1).color_code;
+        cubeStateArray[12] = cubelet;
+        cubeStateArray[13] = cubelet[1] + cubelet[2] + cubelet [0];
+        cubeStateArray[14] = cubelet[2] + cubelet[0] + cubelet [1];
+
+        //  15    16    17
+        // "obw","bwo","wob",
+        cubelet = cube.getFaceColorAndIndex("back",0,0).color_code + cube.getFaceColorAndIndex("right",0,0).color_code + cube.getFaceColorAndIndex("top",0,1).color_code;
+        cubeStateArray[15] = cubelet;
+        cubeStateArray[16] = cubelet[1] + cubelet[2] + cubelet [0];
+        cubeStateArray[17] = cubelet[2] + cubelet[0] + cubelet [1];
+
+        //  18    19    20
+        // "ogy","gyo","yog",
+        cubelet = cube.getFaceColorAndIndex("back",1,1).color_code + cube.getFaceColorAndIndex("left",1,1).color_code + cube.getFaceColorAndIndex("bottom",1,0).color_code;
+        cubeStateArray[18] = cubelet;
+        cubeStateArray[19] = cubelet[1] + cubelet[2] + cubelet [0];
+        cubeStateArray[20] = cubelet[2] + cubelet[0] + cubelet [1];
+
+        //  21    22    23
+        // "oyb","ybo","boy"
+        cubelet = cube.getFaceColorAndIndex("back",1,0).color_code + cube.getFaceColorAndIndex("bottom",1,1).color_code + cube.getFaceColorAndIndex("right",1,0).color_code;
+        cubeStateArray[21] = cubelet;
+        cubeStateArray[22] = cubelet[1] + cubelet[2] + cubelet [0];
+        cubeStateArray[23] = cubelet[2] + cubelet[0] + cubelet [1];
+
+
+        return cubeStateArray.toString();
     },
     
     undo : function()  {
@@ -733,7 +798,16 @@ var Rubik = Extends(THREE.Object3D, {
         
         var i, res,
             cubes = this.rubik.cubelets,
-            obj, cubeletseenas
+            obj, cubeletseenas,
+            color_codes = {
+                "#2c2c2c": 'b',
+                "#ffffff": 'w',
+                "#ffd500": 'y',
+                "#009e60": 'g',
+                "#0051ba": 'b',
+                "#c41e3a": 'r',
+                "#ff5800": 'o'
+            }
         ;
         
         for (i=0; i<cubes.length; i++)
@@ -747,27 +821,27 @@ var Rubik = Extends(THREE.Object3D, {
                 {
                     case "top":
                                     if (cubeletseenas.xx == jj && cubeletseenas.zz == ii)
-                                    return({color:obj.seencolor[seenface]/*,index:this.rubik.faces.indexOf(obj.mat[seenface])*/});
+                                    return({color:obj.seencolor[seenface],color_code:color_codes[toHex(obj.seencolor[seenface].getHex())]});
                                     break;
                     case "bottom":
                                     if (cubeletseenas.xx == jj && cubeletseenas.zz == this.rubik.N-1-ii)
-                                    return({color:obj.seencolor[seenface]/*,index:rubik.faces.indexOf(obj.mat[seenface])*/});
+                                    return({color:obj.seencolor[seenface],color_code:color_codes[toHex(obj.seencolor[seenface].getHex())]});
                                     break;
                     case "left":
                                     if (cubeletseenas.yy == this.rubik.N-1-ii && cubeletseenas.zz == this.rubik.N-1-jj)
-                                    return({color:obj.seencolor[seenface]/*,index:rubik.faces.indexOf(obj.mat[seenface])*/});
+                                    return({color:obj.seencolor[seenface],color_code:color_codes[toHex(obj.seencolor[seenface].getHex())]});
                                     break;
                     case "right":
                                     if (cubeletseenas.yy == this.rubik.N-1-ii && cubeletseenas.zz == jj)
-                                    return({color:obj.seencolor[seenface]/*,index:rubik.faces.indexOf(obj.mat[seenface])*/});
+                                    return({color:obj.seencolor[seenface],color_code:color_codes[toHex(obj.seencolor[seenface].getHex())]});
                                     break;
                     case "front":
                                     if (cubeletseenas.xx == jj && cubeletseenas.yy == this.rubik.N-1-ii)
-                                    return({color:obj.seencolor[seenface]/*,index:rubik.faces.indexOf(obj.mat[seenface])*/});
+                                    return({color:obj.seencolor[seenface],color_code:color_codes[toHex(obj.seencolor[seenface].getHex())]});
                                     break;
                     case "back":
                                     if (cubeletseenas.xx == this.rubik.N-1-jj && cubeletseenas.yy == this.rubik.N-1-ii)
-                                    return({color:obj.seencolor[seenface]/*,index:rubik.faces.indexOf(obj.mat[seenface])*/});
+                                    return({color:obj.seencolor[seenface],color_code:color_codes[toHex(obj.seencolor[seenface].getHex())]});
                                     break;
                 }
             }

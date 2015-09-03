@@ -193,6 +193,13 @@
         keyboard[keyCode]();
     }
 
+    function returnCubeState(){
+        var params = rubikcube.getCubeStateAsString();
+        $.post( "/"+params, function(data) {
+            debugger;
+        });
+    }
+
     var self = {
     
         init : function() {
@@ -235,6 +242,7 @@
                 addKeyListeners(key);
             });
 
+            $('#solve').on("click", returnCubeState);
             
             pad.addEventListener( 'mousedown', onPadMouseDown, false );
             newbt.addEventListener( 'click', function(){

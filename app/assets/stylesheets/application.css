@@ -16,7 +16,7 @@
 
 body {
     font-family: Monospace;
-    background: #121212 url('assets/back.png') no-repeat 50% 50%;
+    background: #121212 url('back.png') no-repeat 50% 50%;
     margin: 0px;
     overflow: hidden;
     padding:0;
@@ -32,20 +32,7 @@ body {
     cursor:pointer;
     float:left
 }
-.colorSelector {
-    width: 36px;
-    height: 36px;
-    background-image: url(assets/select.png);
-}
-.colorSelector div {
-    position: absolute;
-    top: 3px;
-    left: 3px;
-    width: 30px;
-    height: 30px;
-    background-image: url(assets/select.png);
-    background-position:center center;
-}
+
 .button {
     -moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
     -webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
@@ -98,11 +85,4 @@ body {
     position:relative;
     display:block;
     margin: 3px 0px;
-}
-#forkongithub a, #forkongithub a:hover{background:#fd0002;color:#fff;}
-#footer {
-    z-index: 100;
-    position:absolute;
-    left: 10px;
-    bottom: 80px;
 }

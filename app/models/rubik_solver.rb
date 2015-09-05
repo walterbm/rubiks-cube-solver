@@ -2,14 +2,25 @@ class RubikSolver
 
   SOLVED_CUBE = RubikCube.new(["rgw","gwr","wrg","rwb","wbr","brw","ryg","ygr","gry","rby","byr","yrb","owg","wgo","gow","obw","bwo","wob","ogy","gyo","yog","oyb","ybo","boy"])
 
+  attr_reader :start_cube
+
   def initialize(start_cube)
-    @start_cube = RubikCube.new(start_cube)
+    @start_cube = RubikCube.new(format_cube(start_cube))
 
     @forward_queue = []
     @backward_queue = []
 
     @past_forward_moves = {}
     @past_backward_moves = {}
+  end
+
+  def format_cube(array)
+    array.tap do |a|
+      loop do
+        break if a[21..23].include?("oyb")
+        a.rotate!(3)
+      end
+    end
   end
 
   def neighbors(current_node)

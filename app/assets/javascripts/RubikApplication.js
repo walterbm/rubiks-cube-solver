@@ -180,7 +180,6 @@
 
     function returnCubeState(){
         var params = rubikcube.getCubeStateAsString();
-        $("#results").fadeOut();
         $("#loading_div").fadeIn();
         $.post( "/"+params, function(data) {
             autoRotateCube(data, function(){
@@ -262,6 +261,7 @@
                 updateflatimage();
             }, false );
             scramblebt.addEventListener( 'click', function(){
+                $("#results").fadeOut();
                 rubikcube.scramble(10);
                 updateflatimage();
             }, false );

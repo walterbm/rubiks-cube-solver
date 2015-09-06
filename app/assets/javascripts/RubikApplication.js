@@ -180,10 +180,13 @@
 
     function returnCubeState(){
         var params = rubikcube.getCubeStateAsString();
+        $("#results").fadeOut();
+        $("#loading_div").fadeIn();
         $.post( "/"+params, function(data) {
-            $("#loading_div").fadeIn();
             autoRotateCube(data, function(){
               $("#loading_div").fadeOut("slow");
+              $("#results span").text(data.length);
+              $("#results").fadeIn("slow");
             });
         });
     }

@@ -1,20 +1,21 @@
 <div id="controls">
-    
     <div class="btn-group-vertical">
-        <input class="btn btn-info" type='button' id='newrubik' value='New Cube'/>
-        <input class="btn btn-warning" type='button' id='scramble' value='Scramble'/>  
-        <input class="btn btn-success" type='button' id='solve' value='Solve'/>   
-    </div>
-    
+        <input class="btn btn-default" type='button' id='newrubik' value='New Cube'/>
+        <input class="btn btn-default" type='button' id='scramble' value='Scramble'/>  
+        <input class="btn btn-success" type='button' id='solve' value='Solve'/>
+        <input class="btn btn-default"  type='button' id="pop-over" data-toggle="popover" title="by: <a target='_blank' href='https://github.com/walterbm/rubiks-cube-solver'>walterBM</a>" data-content="2x2x2 Rubik's Cube solver using a 2-way BFS to find the shortest solution." data-placement="bottom" data-trigger="focus" value='About'/>
+  </div>
 </div>
 
-<div id="flatimage" style="position:absolute;z-index:10;bottom:80px;right:5px;"></div>
+<div id="flatimage"></div>
 
 <div id="container" style="position:relative;margin:0 auto;padding:0;z-index:0;cursor:pointer;">
   <h1 id="title">Breadth First Search Rubik's Cube Solver</h1>
-  <div id="loading_div" class="loader">Loading...</div>
+  <div id="loading_div" class="loader">Loading...</div> 
+  <div id="results">solved in <span class="label label-success">5</span> moves</div>
 </div>
   
 <script>
 RubikApplication.init();
+$('[data-toggle="popover"]').popover({html:true});
 </script>

@@ -16,6 +16,7 @@
 
 //= require three.min.js
 //= require tween.min.js
+//= require bootstrap.min.js
 
 //= require rubik.min.js
 //= require rubikApplication.js

@@ -1,7 +1,7 @@
 .loader,
 .loader:before,
 .loader:after {
-  background: #ffffff;
+  background: #ecf0f1;
   -webkit-animation: load1 1s infinite ease-in-out;
   animation: load1 1s infinite ease-in-out;
   width: 1em;

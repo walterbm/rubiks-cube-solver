@@ -17,5 +17,5 @@
 //= require three.min.js
 //= require tween.min.js
 
-//= require rubik.js
+//= require rubik.min.js
 //= require rubikApplication.js

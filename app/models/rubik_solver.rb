@@ -1,8 +1,6 @@
 class RubikSolver
 
-  # SOLVED = RubikCube.new(["rgw","gwr","wrg","rwb","wbr","brw","ryg","ygr","gry","rby","byr","yrb","owg","wgo","gow","obw","bwo","wob","ogy","gyo","yog","oyb","ybo","boy"])
-
-  attr_reader :start_cube, :final_cube
+  attr_reader :start_cube, :final_cube, :forward_queue, :past_forward_moves, :backward_queue, :past_backward_moves
 
   def initialize(start_cube_array)
     @start_cube = RubikCube.new(start_cube_array)
@@ -27,15 +25,14 @@ class RubikSolver
 
     cublet7 = @start_cube.cube.last
 
-    right = cublet7[0]
-    back = cublet7[1]
-    down = cublet7[2]
+    right, back, down,  = cublet7[0], cublet7[1], cublet7[2]
+    left, front, up = opposite[right], opposite[back], opposite[down]
 
-    left = opposite[right]
-    front = opposite[back]
-    up = opposite[down]
+    RubikCube.new(solved_state(front,left,up,back,right,down))
+  end
 
-    solved_state = [
+  def solved_state(front,left,up,back,right,down)
+    [
       "#{front}#{left}#{up}", "#{left}#{up}#{front}", "#{up}#{front}#{left}", 
       "#{front}#{up}#{right}", "#{up}#{right}#{front}", "#{right}#{front}#{up}", 
       "#{front}#{down}#{left}", "#{down}#{left}#{front}", "#{left}#{front}#{down}", 
@@ -45,8 +42,6 @@ class RubikSolver
       "#{back}#{left}#{down}", "#{left}#{down}#{back}", "#{down}#{back}#{left}", 
       "#{back}#{down}#{right}", "#{down}#{right}#{back}", "#{right}#{back}#{down}"
     ]
-
-    RubikCube.new(solved_state)
   end
 
   def neighbors(current_node)
@@ -61,44 +56,30 @@ class RubikSolver
     !move_history.has_key?(node.data_cube.to_s)
   end
 
-  def add_to_forward_queues(node)
-    @past_forward_moves[node.data_cube.to_s] = node
-    @forward_queue << node
+  def add_to_queues(direction,node)
+    send("past_#{direction}_moves")[node.data_cube.to_s] = node
+    send("#{direction}_queue") << node
   end
 
-  def add_to_backward_queues(node)
-    @past_backward_moves[node.data_cube.to_s] = node
-    @backward_queue << node
-  end
-
-  def move_forward
-    current_forward_move = @forward_queue.shift
-    neighbors(current_forward_move).each do |neighbor|
-      if valid_move?(@past_forward_moves,neighbor)
-        add_to_forward_queues(neighbor)
-      end
-    end
-  end
-
-  def move_backwards
-    current_backward_move = @backward_queue.shift
-    neighbors(current_backward_move).each do |neighbor|
-      if valid_move?(@past_backward_moves,neighbor)
-        add_to_backward_queues(neighbor)
+  def move(direction)
+    current_move = self.send("#{direction}_queue").shift
+    neighbors(current_move).each do |neighbor|
+      if valid_move?(self.send("past_#{direction}_moves"),neighbor)
+        self.send("add_to_queues", direction, neighbor)
       end
     end
   end
 
   def solve
-    add_to_forward_queues(Node.new({move: "start", cube: @start_cube}) )
-    add_to_backward_queues(Node.new({move: "solved", cube: @final_cube}) )
+    add_to_queues("forward", Node.new({move: "start", cube: @start_cube}) )
+    add_to_queues("backward", Node.new({move: "solved", cube: @final_cube}) )
 
     until queues_empty?
 
       break if solved?
 
-      move_forward unless @forward_queue.empty?
-      move_backwards unless @backward_queue.empty?
+      move("forward") unless @forward_queue.empty?
+      move("backward") unless @backward_queue.empty?
     end
 
     solution_manual

@@ -21,7 +21,7 @@
         container, pad, cross, 
         scramblebt, undobt, newbt, 
         flatimage, rubikN,
-        padw = 100, padh = 100, pad2x = 50, pad2y = 50,
+        padw = 800, padh = 800, pad2x = 50, pad2y = 50,
         cw = 20, ch = 20, cw2 = 10, ch2 = 10,
         camera, scene, renderer, projector,
 
@@ -76,13 +76,6 @@
         pad.addEventListener( 'mouseup', onPadMouseUp, false );
         pad.addEventListener( 'mouseout', onPadMouseOut, false );
         
-        //mouseXOnMouseDown = event.clientX - pad2x;
-        //mouseYOnMouseDown = event.clientY - pad2y;
-        //mouseX = event.clientX - pad2x;
-        //mouseY = event.clientY - pad2y;
-        //targetRotationY = (mouseX/pad2x)*Math.PI;
-        //targetRotationX = (mouseY/pad2y)*Math.PI;
-        
         mouseX=(( event.clientX / padw ) * 2 - 1);
         targetRotationY=mouseX;
         mouseY=(( event.clientY / padh ) * 2 - 1);
@@ -90,8 +83,6 @@
         
         targetRotationOnMouseDownY = targetRotationY;
         targetRotationOnMouseDownX = targetRotationX;
-        cross.style.left=(event.clientX-cw2)+'px';
-        cross.style.top=(event.clientY-ch2)+'px';
     }
     
 
@@ -103,14 +94,10 @@
         targetRotationY=mouseX;
         mouseY=(( event.clientY / padh ) * 2 - 1);
         targetRotationX=mouseY;
-        cross.style.left=(event.clientX-cw2)+'px';
-        cross.style.top=(event.clientY-ch2)+'px';
     }
 
     function onPadMouseUp( event ) 
     {
-        cross.style.left=(event.clientX-cw2)+'px';
-        cross.style.top=(event.clientY-ch2)+'px';
         pad.removeEventListener( 'mousemove', onPadMouseMove, false );
         pad.removeEventListener( 'mouseup', onPadMouseUp, false );
         pad.removeEventListener( 'mouseout', onPadMouseOut, false );
@@ -125,8 +112,6 @@
     
     function onPadMouseOut( event ) 
     {
-        cross.style.left=(event.clientX-cw2)+'px';
-        cross.style.top=(event.clientY-ch2)+'px';
         pad.removeEventListener( 'mousemove', onPadMouseMove, false );
         pad.removeEventListener( 'mouseup', onPadMouseUp, false );
         pad.removeEventListener( 'mouseout', onPadMouseOut, false );
@@ -195,18 +180,27 @@
 
     function returnCubeState(){
         var params = rubikcube.getCubeStateAsString();
+        $("#results").fadeOut();
+        $("#loading_div").fadeIn();
         $.post( "/"+params, function(data) {
-            autoRotateCube(data);
+            autoRotateCube(data, function(){
+              $("#loading_div").fadeOut("slow");
+              $("#results span").text(data.length);
+              $("#results").fadeIn("slow");
+            });
         });
     }
 
-    function autoRotateCube(moves){
+    function autoRotateCube(moves,callback){
         moveCount = -1;
         (function f(){
             moveCount++;
             if (moveCount < moves.length){
               moveCube(moves[moveCount]);
               setTimeout(f, 1000);
+            }
+            else{
+              callback();
             }
          })();
     }
@@ -220,8 +214,7 @@
         init : function() {
             
             container = document.getElementById('container');
-            pad = document.getElementById('pad');
-            cross = document.getElementById('cross');
+            pad = document.getElementById('container');
             newbt = document.getElementById('newrubik');
             scramblebt = document.getElementById('scramble');
             flatimage = document.getElementById('flatimage');

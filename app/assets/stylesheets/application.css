@@ -12,77 +12,78 @@
  *
  *= require_tree .
  *= require_self
+
+ *= require bootstrap.min
+ *= require loading_spinner.css
  */
 
-body {
-    font-family: Monospace;
-    background: #121212;
-    margin: 0px;
-    overflow: hidden;
-    padding:0;
-    position:relative;
-    height:100%;
-    color:#aaa;
-}
-.color-class
-{
-    position:relative;
-    margin-bottom:10px;
-    margin-left:10px;
-    cursor:pointer;
-    float:left
+html, body {
+  margin: 0px;
+  overflow: hidden;
+  padding:0;
+  position:relative;
+  height:100%;
 }
 
-.button {
-    -moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
-    -webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
-    box-shadow:inset 0px 1px 0px 0px #ffffff;
-    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, #dfdfdf) );
-    background:-moz-linear-gradient( center top, #ededed 5%, #dfdfdf 100% );
-    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#dfdfdf');
-    background-color:#ededed;
-    -webkit-border-top-left-radius:20px;
-    -moz-border-radius-topleft:20px;
-    border-top-left-radius:20px;
-    -webkit-border-top-right-radius:20px;
-    -moz-border-radius-topright:20px;
-    border-top-right-radius:20px;
-    -webkit-border-bottom-right-radius:20px;
-    -moz-border-radius-bottomright:20px;
-    border-bottom-right-radius:20px;
-    -webkit-border-bottom-left-radius:20px;
-    -moz-border-radius-bottomleft:20px;
-    border-bottom-left-radius:20px;
-    text-indent:0;
-    border:1px solid #dcdcdc;
-    display:inline-block;
-    color:#777777;
-    font-family:Arial;
-    font-size:15px;
-    font-weight:bold;
-    font-style:normal;
-    height:50px;
-    line-height:50px;
-    width:86px;
-    text-decoration:none;
-    text-align:center;
-    text-shadow:1px 1px 0px #ffffff;
+#container{
+  background: repeating-radial-gradient(
+    circle,
+    purple,
+    purple 10px,
+    #4b026f 10px, 
+    #4b026f 20px
+  );
 }
-.button:hover {
-    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #dfdfdf), color-stop(1, #ededed) );
-    background:-moz-linear-gradient( center top, #dfdfdf 5%, #ededed 100% );
-    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#dfdfdf', endColorstr='#ededed');
-    background-color:#dfdfdf;
-}.button:active {
-    position:relative;
-    top:1px;
+
+#title{
+  float: left;
+  padding-left: 10px;
+  position: relative;
+  z-index: 10;
+  color: #ecf0f1;
 }
-.button {
-    width:120px;
-    height:30px;
-    line-height:30px;
-    cursor:pointer;
-    position:relative;
-    display:block;
-    margin: 3px 0px;
+
+#controls {
+  position:absolute;
+  z-index:100;
+  top: 80px;
+  left: 0;
+  margin:0;
+  padding:0;
+  padding-left: 10px;
 }
+
+#loading_div{
+  display: none;
+  position: absolute;
+  left: 49.5%;
+  top: 4em;
+  z-index: 10;
+}
+
+#flatimage{
+  position:absolute;
+  z-index:10;
+  top:70px;
+  right:5px;"
+}
+
+#results{
+  display: none;
+  color: #ecf0f1;
+  position: absolute;
+  left: 39.5%;
+  top: 4em;
+  z-index: 10;
+  font-size: 2em;
+  font-weight: 200;
+}
+
+#results span{
+  font-size: 1em;
+}
+
+#pop-over{
+  z-index: 10;
+}
+

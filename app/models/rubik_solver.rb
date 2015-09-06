@@ -1,11 +1,12 @@
 class RubikSolver
 
-  SOLVED_CUBE = RubikCube.new(["rgw","gwr","wrg","rwb","wbr","brw","ryg","ygr","gry","rby","byr","yrb","owg","wgo","gow","obw","bwo","wob","ogy","gyo","yog","oyb","ybo","boy"])
+  # SOLVED = RubikCube.new(["rgw","gwr","wrg","rwb","wbr","brw","ryg","ygr","gry","rby","byr","yrb","owg","wgo","gow","obw","bwo","wob","ogy","gyo","yog","oyb","ybo","boy"])
 
-  attr_reader :start_cube
+  attr_reader :start_cube, :final_cube
 
-  def initialize(start_cube)
-    @start_cube = RubikCube.new(format_cube(start_cube))
+  def initialize(start_cube_array)
+    @start_cube = RubikCube.new(start_cube_array)
+    @final_cube = set_solved_state
 
     @forward_queue = []
     @backward_queue = []
@@ -14,13 +15,38 @@ class RubikSolver
     @past_backward_moves = {}
   end
 
-  def format_cube(array)
-    array.tap do |a|
-      loop do
-        break if a[21..23].include?("oyb")
-        a.rotate!(3)
-      end
-    end
+  def set_solved_state
+    opposite = {
+      'r' => 'o',
+      'o' => 'r',
+      'w' => 'y',
+      'y' => 'w',
+      'b' => 'g',
+      'g' => 'b'
+    }
+
+    cublet7 = @start_cube.cube.last
+
+    right = cublet7[0]
+    back = cublet7[1]
+    down = cublet7[2]
+
+    left = opposite[right]
+    front = opposite[back]
+    up = opposite[down]
+
+    solved_state = [
+      "#{front}#{left}#{up}", "#{left}#{up}#{front}", "#{up}#{front}#{left}", 
+      "#{front}#{up}#{right}", "#{up}#{right}#{front}", "#{right}#{front}#{up}", 
+      "#{front}#{down}#{left}", "#{down}#{left}#{front}", "#{left}#{front}#{down}", 
+      "#{front}#{right}#{down}", "#{right}#{down}#{front}", "#{down}#{front}#{right}", 
+      "#{back}#{up}#{left}", "#{up}#{left}#{back}", "#{left}#{back}#{up}", 
+      "#{back}#{right}#{up}", "#{right}#{up}#{back}", "#{up}#{back}#{right}", 
+      "#{back}#{left}#{down}", "#{left}#{down}#{back}", "#{down}#{back}#{left}", 
+      "#{back}#{down}#{right}", "#{down}#{right}#{back}", "#{right}#{back}#{down}"
+    ]
+
+    RubikCube.new(solved_state)
   end
 
   def neighbors(current_node)
@@ -65,7 +91,7 @@ class RubikSolver
 
   def solve
     add_to_forward_queues(Node.new({move: "start", cube: @start_cube}) )
-    add_to_backward_queues(Node.new({move:"solved", cube: SOLVED_CUBE}) )
+    add_to_backward_queues(Node.new({move: "solved", cube: @final_cube}) )
 
     until queues_empty?
 

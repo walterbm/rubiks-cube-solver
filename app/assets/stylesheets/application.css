@@ -16,7 +16,7 @@
 
 body {
     font-family: Monospace;
-    background: #121212 url('back.png') no-repeat 50% 50%;
+    background: #121212;
     margin: 0px;
     overflow: hidden;
     padding:0;

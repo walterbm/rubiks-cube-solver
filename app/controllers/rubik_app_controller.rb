@@ -4,11 +4,10 @@ class RubikAppController < ApplicationController
   end
 
   def solve
-    solution = RubikApp.new(cube_params_as_array).solution_moves
+    solution = RubikApp.new(cube_params_as_array)
+    @moves = solution.solution_moves
 
-    binding.pry
-    
-    render plain: "hello from the controller"
+    render json: @moves
   end
 
   private

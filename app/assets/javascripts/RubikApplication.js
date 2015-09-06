@@ -178,13 +178,13 @@
         var keyboard = {
             113: function(){rubikcube.rotate(turnCubeFace("front_clockwise"));},            // q
             119: function(){rubikcube.rotate(turnCubeFace("front_counterclockwise"));},     // w
-            97: function(){rubikcube.rotate(turnCubeFace("left_clockwise"));},              // a
+            97:  function(){rubikcube.rotate(turnCubeFace("left_clockwise"));},             // a
             115: function(){rubikcube.rotate(turnCubeFace("left_counterclockwise"));},      // s
             100: function(){rubikcube.rotate(turnCubeFace("right_clockwise"));},            // d
             102: function(){rubikcube.rotate(turnCubeFace("right_counterclockwise"));},     // f
             122: function(){rubikcube.rotate(turnCubeFace("up_clockwise"));},               // z
             120: function(){rubikcube.rotate(turnCubeFace("up_counterclockwise"));},        // x
-            99: function(){rubikcube.rotate(turnCubeFace("bottom_clockwise"));},            // c
+            99:  function(){rubikcube.rotate(turnCubeFace("bottom_clockwise"));},           // c
             118: function(){rubikcube.rotate(turnCubeFace("bottom_counterclockwise"));},    // v
             101: function(){rubikcube.rotate(turnCubeFace("back_clockwise"));},             // e
             114: function(){rubikcube.rotate(turnCubeFace("back_counterclockwise"));},      // r
@@ -196,8 +196,23 @@
     function returnCubeState(){
         var params = rubikcube.getCubeStateAsString();
         $.post( "/"+params, function(data) {
-            debugger;
+            autoRotateCube(data);
         });
+    }
+
+    function autoRotateCube(moves){
+        moveCount = -1;
+        (function f(){
+            moveCount++;
+            if (moveCount < moves.length){
+              moveCube(moves[moveCount]);
+              setTimeout(f, 1000);
+            }
+         })();
+    }
+
+    function moveCube(move){
+        rubikcube.rotate(turnCubeFace(move));
     }
 
     var self = {
@@ -264,12 +279,7 @@
             animate();
         },
         
-        animate : animate,
-
-        turnCube : function(direction){
-                    rubikcube.rotate(turnCubeFace(direction));
-        }            
-    
+        animate : animate
     };
     
     // export RubikApp Object

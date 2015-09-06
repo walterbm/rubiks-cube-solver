@@ -11,19 +11,11 @@ RSpec.describe RubikCube, :type => :model do
     start == RubikCube.new
   end
 
-  it "rotates initialization array so yellow-orange-blue cublet is at position 21-22-23" do
-    shuffled_cube = ["gry","ryg","ygr","boy","oyb","ybo","gyo","yog","ogy","wgo","gow","owg","rgw","gwr","wrg","rby","byr","yrb","brw","rwb","wbr","bwo","wob","obw"]
-    start = RubikCube.new(shuffled_cube)
+  it 'correctly sets the solved state' do
+    start = RubikCube.new
+    solver = RubikSolver.new(start.cube)
 
-    solver = RubikSolver.new(shuffled_cube)
-    expect(solver.start_cube.cube[21..23]).to include("oyb")
-
-    solver.solve 
-    solution_moves = solver.solution_manual
-    solution_moves.delete("start")
-    solution_moves.delete("solved")
-
-    expect(test_solution(start,solution_moves)).to eq(true)
+    expect(solver.final_cube).to eq(start)
   end
 
   it "solves an already solved cube" do 

@@ -15,8 +15,8 @@ Home page for the Rubik Solver app showing the 3D cube created with three.js.
 ![Rubik Solver shuffled](screenshots/rubik-solver-shuffled.png "The cube can be randomly shuffled while maintaining geometry like any real-world Rubik's cube.")
 The cube can be randomly shuffled while maintaining geometry like any real-world Rubik's cube.
 
-![Rubik Solver solved](screenshots/rubik-solver-solved.png "Uses DFS to automatically find the shortest number of moves to solve the Rubik's cube.")
-Uses 2-way DFS to automatically find the shortest number of twists required to solve the Rubik's cube.
+![Rubik Solver solved](screenshots/rubik-solver-solved.png "Uses BFS to automatically find the shortest number of moves to solve the Rubik's cube.")
+Uses 2-way BFS to automatically find the shortest number of twists required to solve the Rubik's cube.
 
 ## Background
 
@@ -33,7 +33,7 @@ Please feel free to contribute to the project.
 
 ## Future
 
-Maybe in the future I will attempt to create a solver for the classic Rubik's Cube. A 3x3x3 Rubik's Cube has over [43 quintillion](http://www.therubikzone.com/Number-Of-Combinations.html) possible combinations and requires [specialized algorithms](https://www.cs.princeton.edu/courses/archive/fall06/cos402/papers/korfrubik.pdf) to reduce the complexity of the problem while sacrificing optimization. 
+Maybe in the future I will attempt to create a solver for the classic Rubik's Cube. Turns out the classic Cube is quite a computational challenge. A 3x3x3 Rubik's Cube has over [43 quintillion](http://www.therubikzone.com/Number-Of-Combinations.html) possible combinations and requires [specialized algorithms](https://www.cs.princeton.edu/courses/archive/fall06/cos402/papers/korfrubik.pdf) to reduce the complexity of the problem at the cost of sacrificing optimization. 
 
 ## Created by:
 
